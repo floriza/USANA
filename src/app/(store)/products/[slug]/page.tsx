@@ -186,7 +186,7 @@ export default async function ProductPage({ params }: Props) {
             </div>
 
             {/* Add to cart */}
-            <AddToCartSection product={product} />
+            <AddToCartSection product={{ id: product.id, stockQuantity: product.stockQuantity, slug: product.slug }} />
 
             {/* FDA / SKU info */}
             <div className="mt-6 pt-6 border-t border-gray-100 space-y-1 text-xs text-gray-500">
