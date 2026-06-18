@@ -1,0 +1,36 @@
+import { z } from "zod";
+
+export const productSchema = z.object({
+  name: z.string().min(2, "Name is required"),
+  sku: z.string().min(2, "SKU is required"),
+  description: z.string().min(10, "Description is required"),
+  shortDescription: z.string().optional(),
+  brand: z.string().default("USANA"),
+  categoryId: z.string().min(1, "Category is required"),
+  price: z.number().positive("Price must be positive"),
+  salePrice: z.number().positive().optional().nullable(),
+  costPrice: z.number().positive().optional().nullable(),
+  stockQuantity: z.number().int().min(0),
+  weight: z.number().positive().optional().nullable(),
+  lengthCm: z.number().positive().optional().nullable(),
+  widthCm: z.number().positive().optional().nullable(),
+  heightCm: z.number().positive().optional().nullable(),
+  status: z.enum(["DRAFT", "ACTIVE", "ARCHIVED", "OUT_OF_STOCK"]),
+  isFeatured: z.boolean().default(false),
+  isNewArrival: z.boolean().default(false),
+  isBestseller: z.boolean().default(false),
+  seoTitle: z.string().optional(),
+  seoDescription: z.string().optional(),
+  metaKeywords: z.string().optional(),
+  lowStockThreshold: z.number().int().min(0).default(10),
+  criticalThreshold: z.number().int().min(0).default(5),
+  fdaRegistrationNo: z.string().optional(),
+  ingredients: z.string().optional(),
+  directions: z.string().optional(),
+  warnings: z.string().optional(),
+  storageInstructions: z.string().optional(),
+  servingSize: z.string().optional(),
+  servingsPerContainer: z.number().int().positive().optional().nullable(),
+});
+
+export type ProductInput = z.infer<typeof productSchema>;
