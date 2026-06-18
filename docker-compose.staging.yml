@@ -1,0 +1,39 @@
+# Staging deployment on Hostinger VPS.
+# Uses Supabase as the database (no local db container).
+# Run with: docker compose -f docker-compose.staging.yml up -d
+
+services:
+  app:
+    image: ghcr.io/floriza/usana:staging
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.staging
+    restart: unless-stopped
+    networks:
+      - usana_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 40s
+      retries: 3
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.staging.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www/certbot:/var/www/certbot:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+    networks:
+      - usana_network
+
+networks:
+  usana_network:
+    driver: bridge
