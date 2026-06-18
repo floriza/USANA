@@ -99,7 +99,7 @@ export const productRepository = {
         images: { orderBy: { sortOrder: "asc" } },
         reviews: {
           where: { status: "APPROVED" },
-          include: { user: { select: { name: true, image: true } } },
+          include: { user: { select: { name: true, avatar: true } } },
           orderBy: { createdAt: "desc" },
           take: 10,
         },
