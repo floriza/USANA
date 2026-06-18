@@ -59,7 +59,15 @@ export async function ProductsGrid({ params }: ProductsGridProps) {
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard
+            key={product.id}
+            product={{
+              ...product,
+              price: parseFloat(product.price.toString()),
+              salePrice: product.salePrice ? parseFloat(product.salePrice.toString()) : null,
+              averageRating: parseFloat(product.averageRating.toString()),
+            }}
+          />
         ))}
       </div>
 

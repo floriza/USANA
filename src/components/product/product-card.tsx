@@ -6,18 +6,16 @@ import { Heart, ShoppingCart, Star } from "lucide-react";
 import { formatCurrency, calculateDiscountPercent } from "@/lib/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-type Decimal = { toString(): string };
-
 interface ProductCardProps {
   product: {
     id: string;
     name: string;
     slug: string;
     thumbnail: string | null;
-    price: Decimal | number;
-    salePrice: Decimal | number | null;
+    price: number;
+    salePrice: number | null;
     stockQuantity: number;
-    averageRating: Decimal | number;
+    averageRating: number;
     reviewCount: number;
     isBestseller?: boolean;
     isNewArrival?: boolean;
@@ -28,11 +26,9 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const queryClient = useQueryClient();
-  const price = parseFloat(product.price.toString());
-  const salePrice = product.salePrice
-    ? parseFloat(product.salePrice.toString())
-    : null;
-  const rating = parseFloat(product.averageRating.toString());
+  const price = product.price;
+  const salePrice = product.salePrice;
+  const rating = product.averageRating;
 
   const addToCartMutation = useMutation({
     mutationFn: async () => {
