@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 const PAYMONGO_API = "https://api.paymongo.com/v1";
 const SECRET_KEY = process.env.PAYMONGO_SECRET_KEY!;
 
@@ -141,7 +143,6 @@ export function verifyWebhookSignature(
   signature: string
 ): boolean {
   const secret = process.env.PAYMONGO_WEBHOOK_SECRET!;
-  const crypto = require("crypto");
   const computedSig = crypto
     .createHmac("sha256", secret)
     .update(rawBody)

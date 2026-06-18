@@ -108,7 +108,7 @@ export function ComplianceChecker() {
               className={`border rounded-xl p-4 text-sm ${SEVERITY_COLORS[v.severity] || ""}`}
             >
               <div className="flex items-center justify-between mb-1">
-                <span className="font-semibold">"{v.phrase}"</span>
+                <span className="font-semibold">&ldquo;{v.phrase}&rdquo;</span>
                 <span className="text-xs font-bold uppercase">{v.severity}</span>
               </div>
               <p className="text-xs opacity-80">Category: {v.category}</p>
