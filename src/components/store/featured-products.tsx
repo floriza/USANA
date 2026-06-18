@@ -32,10 +32,19 @@ export async function FeaturedProducts() {
             <ProductCard
               key={product.id}
               product={{
-                ...product,
+                id: product.id,
+                name: product.name,
+                slug: product.slug,
+                thumbnail: product.thumbnail,
                 price: parseFloat(product.price.toString()),
                 salePrice: product.salePrice ? parseFloat(product.salePrice.toString()) : null,
+                stockQuantity: product.stockQuantity,
                 averageRating: parseFloat(product.averageRating.toString()),
+                reviewCount: product.reviewCount,
+                isBestseller: product.isBestseller,
+                isNewArrival: product.isNewArrival,
+                isFeatured: product.isFeatured,
+                category: product.category ?? undefined,
               }}
             />
           ))}
