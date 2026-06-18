@@ -98,7 +98,7 @@ export const productRepository = {
         category: true,
         images: { orderBy: { sortOrder: "asc" } },
         reviews: {
-          where: { isApproved: true },
+          where: { status: "APPROVED" },
           include: { user: { select: { name: true, image: true } } },
           orderBy: { createdAt: "desc" },
           take: 10,
