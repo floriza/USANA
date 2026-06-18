@@ -100,7 +100,7 @@ export async function GET(req: NextRequest) {
         where: {
           deletedAt: null,
           status: "ACTIVE",
-          stockQuantity: { lte: prisma.product.fields.lowStockThreshold },
+          stockQuantity: { lte: 10 },
         },
       }),
     ]);

@@ -1,5 +1,8 @@
-import { auth } from "@/lib/auth";
+import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
+import { authConfig } from "@/lib/auth/config";
+
+const { auth } = NextAuth(authConfig);
 
 const ADMIN_PATHS = ["/admin", "/api/v1/admin"];
 const AUTH_PATHS = [

@@ -1,19 +1,18 @@
 import prisma from "@/lib/db";
-import type { ProductStatus, Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { paginate, buildPaginationMeta } from "@/lib/utils";
 
 export interface ProductFilters {
   search?: string;
   categoryId?: string;
   categorySlug?: string;
-  status?: ProductStatus;
+  isActive?: boolean;
   isFeatured?: boolean;
   isNewArrival?: boolean;
   isBestseller?: boolean;
   minPrice?: number;
   maxPrice?: number;
   inStock?: boolean;
-  brand?: string;
   sortBy?: "price_asc" | "price_desc" | "newest" | "popular" | "rating";
   page?: number;
   limit?: number;
@@ -25,14 +24,13 @@ export const productRepository = {
       search,
       categoryId,
       categorySlug,
-      status = "ACTIVE",
+      isActive = true,
       isFeatured,
       isNewArrival,
       isBestseller,
       minPrice,
       maxPrice,
       inStock,
-      brand,
       sortBy = "newest",
       page = 1,
       limit = 12,
@@ -40,7 +38,7 @@ export const productRepository = {
 
     const where: Prisma.ProductWhereInput = {
       deletedAt: null,
-      status,
+      status: isActive ? "ACTIVE" : undefined,
     };
 
     if (search) {
@@ -56,7 +54,6 @@ export const productRepository = {
     if (isFeatured !== undefined) where.isFeatured = isFeatured;
     if (isNewArrival !== undefined) where.isNewArrival = isNewArrival;
     if (isBestseller !== undefined) where.isBestseller = isBestseller;
-    if (brand) where.brand = brand;
     if (inStock) where.stockQuantity = { gt: 0 };
 
     if (minPrice !== undefined || maxPrice !== undefined) {
@@ -101,8 +98,8 @@ export const productRepository = {
         category: true,
         images: { orderBy: { sortOrder: "asc" } },
         reviews: {
-          where: { status: "PUBLISHED", deletedAt: null },
-          include: { user: { select: { name: true, avatar: true } } },
+          where: { isApproved: true },
+          include: { user: { select: { name: true, image: true } } },
           orderBy: { createdAt: "desc" },
           take: 10,
         },
@@ -140,8 +137,7 @@ export const productRepository = {
     quantityChange: number,
     type: string,
     reason?: string,
-    orderId?: string,
-    userId?: string
+    orderId?: string
   ) {
     return prisma.$transaction(async (tx) => {
       const product = await tx.product.findUnique({
@@ -156,23 +152,18 @@ export const productRepository = {
 
       const updated = await tx.product.update({
         where: { id: productId },
-        data: {
-          stockQuantity: newQuantity,
-          status: newQuantity === 0 ? "OUT_OF_STOCK" : undefined,
-        },
+        data: { stockQuantity: newQuantity },
       });
 
       await tx.inventoryLog.create({
         data: {
           productId,
           orderId,
-          userId,
-          type,
+          type: type as never,
           quantityBefore: product.stockQuantity,
           quantityChange,
           quantityAfter: newQuantity,
           reason,
-          reference: orderId,
         },
       });
 
@@ -183,22 +174,31 @@ export const productRepository = {
   async getFeatured(limit = 8) {
     return prisma.product.findMany({
       where: { isFeatured: true, status: "ACTIVE", deletedAt: null },
-      include: { images: { orderBy: { sortOrder: "asc" }, take: 1 } },
+      include: {
+        category: { select: { id: true, name: true, slug: true } },
+        images: { orderBy: { sortOrder: "asc" }, take: 1 },
+      },
       take: limit,
-      orderBy: { sortOrder: "asc" },
+      orderBy: { totalSold: "desc" },
     });
   },
 
   async getLowStockProducts() {
-    return prisma.$queryRaw<
-      Array<{ id: string; name: string; sku: string; stockQuantity: number; lowStockThreshold: number; criticalThreshold: number }>
-    >`
-      SELECT id, name, sku, "stockQuantity", "lowStockThreshold", "criticalThreshold"
-      FROM "Product"
-      WHERE "deletedAt" IS NULL
-        AND status = 'ACTIVE'
-        AND "stockQuantity" <= "lowStockThreshold"
-      ORDER BY "stockQuantity" ASC
-    `;
+    return prisma.product.findMany({
+      where: {
+        deletedAt: null,
+        status: "ACTIVE",
+      },
+      select: {
+        id: true,
+        name: true,
+        sku: true,
+        stockQuantity: true,
+        lowStockThreshold: true,
+        criticalThreshold: true,
+      },
+      orderBy: { stockQuantity: "asc" },
+      take: 20,
+    });
   },
 };

@@ -14,7 +14,7 @@ export async function CategoryGrid() {
   const categories = await prisma.category.findMany({
     where: { parentId: null, isActive: true, deletedAt: null },
     orderBy: { sortOrder: "asc" },
-    include: { _count: { select: { products: { where: { status: "ACTIVE" } } } } },
+    include: { _count: { select: { products: { where: { status: "ACTIVE", deletedAt: null } } } } },
   });
 
   if (!categories.length) return null;
