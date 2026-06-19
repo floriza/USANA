@@ -59,6 +59,7 @@ export async function PATCH(
     }
 
     const {
+      categoryId,
       price,
       salePrice,
       costPrice,
@@ -72,6 +73,7 @@ export async function PATCH(
 
     const product = await productRepository.update(id, {
       ...rest,
+      category: { connect: { id: categoryId } },
       price,
       salePrice: salePrice ?? null,
       costPrice: costPrice ?? null,
