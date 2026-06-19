@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Playfair_Display, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/layout/providers";
 import { Toaster } from "sonner";
 
-const inter = Inter({
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-playfair",
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -49,11 +56,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-PH" className={inter.variable}>
-      <body className="min-h-screen bg-background antialiased">
+    <html
+      lang="en-PH"
+      className={`${playfair.variable} ${dmSans.variable}`}
+      style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+    >
+      <body className="min-h-dvh bg-[--background] antialiased" style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}>
         <Providers>
           {children}
-          <Toaster richColors position="top-right" />
+          <Toaster
+            richColors
+            position="top-right"
+            toastOptions={{
+              style: {
+                fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+                borderRadius: "1rem",
+              },
+            }}
+          />
         </Providers>
       </body>
     </html>

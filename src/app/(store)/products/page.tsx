@@ -28,16 +28,22 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const params = await searchParams;
 
   return (
-    <div className="container mx-auto px-4 max-w-7xl py-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">
+    <div className="container mx-auto px-4 max-w-7xl py-8 pt-28">
+      <div className="mb-8">
+        <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: "#2D6A4F" }}>
+          Products
+        </p>
+        <h1
+          className="text-3xl md:text-4xl font-bold"
+          style={{ fontFamily: "var(--font-playfair,serif)", color: "var(--foreground)" }}
+        >
           {params.search
-            ? `Search results for "${params.search}"`
+            ? `Results for "${params.search}"`
             : params.category
-              ? `${params.category.replace(/-/g, " ")} Products`
+              ? `${params.category.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}`
               : "All Products"}
         </h1>
-        <p className="text-gray-500 text-sm mt-1">
+        <p className="text-sm mt-1.5" style={{ color: "var(--muted)" }}>
           Premium USANA health supplements and wellness products
         </p>
       </div>
@@ -54,7 +60,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                 {Array.from({ length: 12 }).map((_, i) => (
                   <div
                     key={i}
-                    className="rounded-2xl bg-gray-100 animate-pulse h-72"
+                    className="rounded-2xl skeleton-shimmer h-72"
                   />
                 ))}
               </div>
