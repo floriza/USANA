@@ -16,6 +16,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter, usePathname } from "next/navigation";
+import { useCartDrawer } from "@/components/cart/cart-drawer-context";
 
 const NAV_LINKS = [
   { label: "Supplements", href: "/products?category=supplements" },
@@ -73,6 +74,7 @@ export function Header() {
     }
   }
 
+  const { toggleDrawer } = useCartDrawer();
   const isHome = pathname === "/";
   const transparent = isHome && !scrolled && !menuOpen;
 
@@ -162,10 +164,11 @@ export function Header() {
                   <Heart className="w-5 h-5" />
                 </Link>
 
-                <Link
-                  href="/cart"
+                <button
+                  onClick={toggleDrawer}
                   className="p-2.5 rounded-xl transition-colors relative"
                   style={{ color: transparent ? "#fff" : "var(--foreground)" }}
+                  aria-label="Cart"
                 >
                   <ShoppingCart className="w-5 h-5" />
                   {cartCount > 0 && (
@@ -173,7 +176,7 @@ export function Header() {
                       {cartCount > 9 ? "9+" : cartCount}
                     </span>
                   )}
-                </Link>
+                </button>
 
                 <div className="relative group hidden sm:block">
                   <button
@@ -211,12 +214,17 @@ export function Header() {
               </>
             ) : (
               <>
-                <Link href="/cart" className="p-2.5 rounded-xl transition-colors relative" style={{ color: transparent ? "#fff" : "var(--foreground)" }}>
+                <button
+                  onClick={toggleDrawer}
+                  className="p-2.5 rounded-xl transition-colors relative"
+                  style={{ color: transparent ? "#fff" : "var(--foreground)" }}
+                  aria-label="Cart"
+                >
                   <ShoppingCart className="w-5 h-5" />
                   {cartCount > 0 && (
                     <span className="absolute -top-0.5 -right-0.5 min-w-[1.1rem] h-[1.1rem] bg-[#2D6A4F] text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">{cartCount}</span>
                   )}
-                </Link>
+                </button>
                 <Link href="/login" className="px-4 py-2 text-sm font-medium rounded-xl border transition-colors hidden sm:inline-flex" style={{ borderColor: transparent ? "rgba(255,255,255,0.4)" : "#D6D0C4", color: transparent ? "#fff" : "var(--foreground)" }}>Login</Link>
                 <Link href="/register" className="px-4 py-2 text-sm font-semibold text-white rounded-xl transition-colors hidden sm:inline-flex" style={{ background: "#2D6A4F" }}>Register</Link>
               </>

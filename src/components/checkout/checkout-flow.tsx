@@ -127,48 +127,75 @@ export function CheckoutFlow({ cart, addresses, pointsBalance, pointsPerPeso }: 
   const selectedAddress = addresses.find((a) => a.id === form.watch("addressId"));
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Checkout</h1>
+    <div className="min-h-screen" style={{ background: "#F8F6F0" }}>
+      <div className="max-w-6xl mx-auto px-4 py-8 pt-28">
+        <h1
+          className="text-2xl md:text-3xl font-bold mb-2"
+          style={{ fontFamily: "var(--font-playfair,serif)", color: "var(--foreground)" }}
+        >
+          Checkout
+        </h1>
 
-        {/* Step indicator */}
-        <div className="flex items-center mb-8">
-          {STEPS.map((s, i) => {
-            const Icon = s.icon;
-            const isActive = i === step;
-            const isDone = i < step;
-            return (
-              <div key={s.id} className="flex items-center">
+        {/* Trust indicators */}
+        <div className="flex flex-wrap items-center gap-4 mb-8 text-xs" style={{ color: "var(--muted)" }}>
+          <span className="flex items-center gap-1.5">
+            <span className="w-4 h-4 rounded-full flex items-center justify-center text-white text-[10px]" style={{ background: "#2D6A4F" }}>🔒</span>
+            SSL Secured Checkout
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span>💳</span>
+            Powered by PayMongo
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span>✓</span>
+            Money-back Guarantee
+          </span>
+        </div>
+
+        {/* Progress bar */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-3">
+            {STEPS.map((s, i) => {
+              const Icon = s.icon;
+              const isActive = i === step;
+              const isDone = i < step;
+              return (
                 <button
+                  key={s.id}
                   onClick={() => i < step && setStep(i)}
                   disabled={i > step}
-                  className={`flex items-center gap-2 text-sm font-medium transition-colors ${
-                    isActive
-                      ? "text-blue-600"
-                      : isDone
-                      ? "text-green-600 hover:text-green-700 cursor-pointer"
-                      : "text-gray-400 cursor-not-allowed"
-                  }`}
+                  className="flex flex-col items-center gap-1.5 flex-1 disabled:cursor-not-allowed"
                 >
                   <span
-                    className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
-                      isActive
-                        ? "border-blue-600 bg-blue-600 text-white"
-                        : isDone
-                        ? "border-green-500 bg-green-500 text-white"
-                        : "border-gray-300 text-gray-400"
-                    }`}
+                    className="w-9 h-9 rounded-full flex items-center justify-center border-2 transition-all duration-300"
+                    style={{
+                      borderColor: isDone || isActive ? "#2D6A4F" : "#D6D0C4",
+                      background: isDone ? "#2D6A4F" : isActive ? "#ECFDF5" : "#fff",
+                      color: isDone ? "#fff" : isActive ? "#2D6A4F" : "#9CA3AF",
+                    }}
                   >
                     {isDone ? <CheckCircle className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
                   </span>
-                  <span className="hidden sm:inline">{s.label}</span>
+                  <span
+                    className="text-xs font-medium hidden sm:block"
+                    style={{ color: isDone || isActive ? "#2D6A4F" : "var(--muted)" }}
+                  >
+                    {s.label}
+                  </span>
                 </button>
-                {i < STEPS.length - 1 && (
-                  <ChevronRight className="w-4 h-4 text-gray-300 mx-2" />
-                )}
-              </div>
-            );
+              );
           })}
+          </div>
+          {/* Progress track */}
+          <div className="relative h-1.5 rounded-full overflow-hidden" style={{ background: "#EAE7DF" }}>
+            <div
+              className="absolute left-0 top-0 h-full rounded-full transition-all duration-500"
+              style={{
+                background: "linear-gradient(90deg, #2D6A4F, #52B788)",
+                width: `${((step + 1) / STEPS.length) * 100}%`,
+              }}
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -218,14 +245,22 @@ export function CheckoutFlow({ cart, addresses, pointsBalance, pointsPerPeso }: 
 
           {/* Order summary sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl border border-gray-100 p-5 sticky top-24">
-              <h2 className="font-bold text-gray-900 mb-4">Order Summary</h2>
+            <div className="rounded-2xl border p-5 sticky top-24" style={{ background: "#fff", borderColor: "#EAE7DF" }}>
+              <h2
+                className="font-bold mb-4"
+                style={{ fontFamily: "var(--font-playfair,serif)", color: "var(--foreground)" }}
+              >
+                Order Summary
+              </h2>
               <div className="space-y-3 max-h-60 overflow-y-auto mb-4">
                 {cart.items.map((item) => {
                   const price = parseFloat(item.product.salePrice ?? item.product.price);
                   return (
                     <div key={item.id} className="flex gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-gray-50 flex-shrink-0 overflow-hidden">
+                      <div
+                        className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden"
+                        style={{ background: "#F8F6F0" }}
+                      >
                         {item.product.thumbnail ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
@@ -238,10 +273,10 @@ export function CheckoutFlow({ cart, addresses, pointsBalance, pointsPerPeso }: 
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">{item.product.name}</p>
-                        <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                        <p className="text-sm font-medium truncate" style={{ color: "var(--foreground)" }}>{item.product.name}</p>
+                        <p className="text-xs" style={{ color: "var(--muted)" }}>Qty: {item.quantity}</p>
                       </div>
-                      <p className="text-sm font-semibold text-gray-900 flex-shrink-0">
+                      <p className="text-sm font-semibold flex-shrink-0" style={{ color: "var(--foreground)" }}>
                         {formatCurrency(price * item.quantity)}
                       </p>
                     </div>
@@ -249,22 +284,25 @@ export function CheckoutFlow({ cart, addresses, pointsBalance, pointsPerPeso }: 
                 })}
               </div>
 
-              <div className="border-t border-gray-100 pt-4 space-y-2 text-sm">
-                <div className="flex justify-between text-gray-600">
+              <div className="border-t pt-4 space-y-2 text-sm" style={{ borderColor: "#EAE7DF" }}>
+                <div className="flex justify-between" style={{ color: "var(--muted)" }}>
                   <span>Subtotal</span>
                   <span>{formatCurrency(subtotal)}</span>
                 </div>
                 {pointsDiscount > 0 && (
-                  <div className="flex justify-between text-green-600">
+                  <div className="flex justify-between" style={{ color: "#2D6A4F" }}>
                     <span>Points Discount</span>
                     <span>-{formatCurrency(pointsDiscount)}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between" style={{ color: "var(--muted)" }}>
                   <span>Shipping</span>
                   <span>{shippingFee > 0 ? formatCurrency(shippingFee) : "—"}</span>
                 </div>
-                <div className="flex justify-between font-bold text-gray-900 text-base border-t border-gray-100 pt-2 mt-2">
+                <div
+                  className="flex justify-between font-bold text-base border-t pt-2 mt-2"
+                  style={{ borderColor: "#EAE7DF", color: "var(--foreground)", fontFamily: "var(--font-playfair,serif)" }}
+                >
                   <span>Total</span>
                   <span>{formatCurrency(total)}</span>
                 </div>

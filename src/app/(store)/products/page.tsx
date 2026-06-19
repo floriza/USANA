@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { ProductsGrid } from "@/components/product/products-grid";
 import { ProductFilters } from "@/components/product/product-filters";
+import { FilterDrawerTrigger } from "@/components/product/filter-drawer";
 
 export const metadata: Metadata = {
   title: "All Products",
@@ -46,6 +47,11 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         <p className="text-sm mt-1.5" style={{ color: "var(--muted)" }}>
           Premium USANA health supplements and wellness products
         </p>
+      </div>
+
+      {/* Mobile filter trigger */}
+      <div className="lg:hidden mb-4">
+        <FilterDrawerTrigger />
       </div>
 
       <div className="flex gap-6">

@@ -1,5 +1,5 @@
 ﻿import { productRepository } from "@/repositories/product.repository";
-import { ProductCard } from "@/components/product/product-card";
+import { FeaturedProductsGrid } from "./featured-products-grid";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -33,28 +33,23 @@ export async function FeaturedProducts() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={{
-                id: product.id,
-                name: product.name,
-                slug: product.slug,
-                thumbnail: product.thumbnail,
-                price: parseFloat(product.price.toString()),
-                salePrice: product.salePrice ? parseFloat(product.salePrice.toString()) : null,
-                stockQuantity: product.stockQuantity,
-                averageRating: parseFloat(product.averageRating.toString()),
-                reviewCount: product.reviewCount,
-                isBestseller: product.isBestseller,
-                isNewArrival: product.isNewArrival,
-                isFeatured: product.isFeatured,
-                category: product.category ?? undefined,
-              }}
-            />
-          ))}
-        </div>
+        <FeaturedProductsGrid
+          products={products.map((p) => ({
+            id: p.id,
+            name: p.name,
+            slug: p.slug,
+            thumbnail: p.thumbnail,
+            price: parseFloat(p.price.toString()),
+            salePrice: p.salePrice ? parseFloat(p.salePrice.toString()) : null,
+            stockQuantity: p.stockQuantity,
+            averageRating: parseFloat(p.averageRating.toString()),
+            reviewCount: p.reviewCount,
+            isBestseller: p.isBestseller,
+            isNewArrival: p.isNewArrival,
+            isFeatured: p.isFeatured,
+            category: p.category ?? undefined,
+          }))}
+        />
 
         <div className="mt-8 text-center sm:hidden">
           <Link
