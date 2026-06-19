@@ -4,12 +4,16 @@ import { cn } from "@/lib/utils";
 interface HealthDisclaimerProps {
   variant?: "inline" | "banner" | "minimal";
   className?: string;
+  /** Pass false to suppress the disclaimer for FDA-evaluated products */
+  showDisclaimer?: boolean;
 }
 
 export function HealthDisclaimer({
   variant = "inline",
   className,
+  showDisclaimer = true,
 }: HealthDisclaimerProps) {
+  if (!showDisclaimer) return null;
   if (variant === "minimal") {
     return (
       <p className={cn("text-xs text-gray-500 italic", className)}>

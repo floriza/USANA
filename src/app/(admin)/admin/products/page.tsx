@@ -4,6 +4,7 @@ import prisma from "@/lib/db";
 import { formatCurrency, buildPaginationMeta } from "@/lib/utils";
 import { Pagination } from "@/components/ui/pagination";
 import { Plus, Search } from "lucide-react";
+import { FdaToggle } from "@/components/admin/fda-toggle";
 
 export const metadata: Metadata = { title: "Products | Admin" };
 
@@ -118,6 +119,9 @@ export default async function AdminProductsPage({ searchParams }: Props) {
               <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">
                 Sold
               </th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">
+                FDA
+              </th>
               <th className="px-4 py-3" />
             </tr>
           </thead>
@@ -183,6 +187,13 @@ export default async function AdminProductsPage({ searchParams }: Props) {
                   {product._count.orderItems}
                 </td>
                 <td className="px-4 py-3">
+                  <FdaToggle
+                    productId={product.id}
+                    productName={product.name}
+                    initialValue={product.isFdaEvaluated}
+                  />
+                </td>
+                <td className="px-4 py-3">
                   <Link
                     href={`/admin/products/${product.id}`}
                     className="text-xs text-blue-600 hover:underline"
@@ -195,7 +206,7 @@ export default async function AdminProductsPage({ searchParams }: Props) {
             {!products.length && (
               <tr>
                 <td
-                  colSpan={7}
+                  colSpan={8}
                   className="px-4 py-8 text-center text-sm text-gray-500"
                 >
                   No products found

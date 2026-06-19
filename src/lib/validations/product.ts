@@ -25,6 +25,7 @@ export const productSchema = z.object({
   lowStockThreshold: z.number().int().min(0).default(10),
   criticalThreshold: z.number().int().min(0).default(5),
   fdaRegistrationNo: z.string().optional(),
+  isFdaEvaluated: z.boolean().default(false),
   ingredients: z.string().optional(),
   directions: z.string().optional(),
   warnings: z.string().optional(),

@@ -342,6 +342,7 @@ model Product {
   criticalThreshold   Int           @default(5)
   fdaRegistrationNo   String?
   fdaApprovalDate     DateTime?
+  isFdaEvaluated      Boolean       @default(false)
   ingredients         String?       @db.Text
   directions          String?       @db.Text
   warnings            String?       @db.Text

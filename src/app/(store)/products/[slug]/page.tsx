@@ -251,7 +251,10 @@ export default async function ProductPage({ params }: Props) {
             }))}
           />
           <div className="mt-6">
-            <HealthDisclaimer variant="inline" />
+            <HealthDisclaimer
+              variant="inline"
+              showDisclaimer={!product.isFdaEvaluated}
+            />
           </div>
         </div>
       </div>
