@@ -120,7 +120,7 @@ jobs:
     if: github.ref == 'refs/heads/staging'
     environment:
       name: staging
-      url: ${{ secrets.STAGING_URL }}
+      url: ${{ vars.STAGING_URL }}
     steps:
       - name: Deploy to Hostinger VPS (Staging)
         uses: appleboy/ssh-action@v1.0.0
@@ -150,7 +150,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment:
       name: production
-      url: ${{ secrets.PRODUCTION_URL }}
+      url: ${{ vars.PRODUCTION_URL }}
     steps:
       - name: Deploy to Hostinger VPS (Production)
         uses: appleboy/ssh-action@v1.0.0
