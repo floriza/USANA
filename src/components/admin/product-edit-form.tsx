@@ -81,16 +81,16 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
     stockQuantity: product.stockQuantity,
     weight: product.weight ? parseFloat(String(product.weight)) : "",
     status: product.status,
-    isFeatured: product.isFeatured,
-    isNewArrival: product.isNewArrival,
-    isBestseller: product.isBestseller,
+    isFeatured: product.isFeatured ?? false,
+    isNewArrival: product.isNewArrival ?? false,
+    isBestseller: product.isBestseller ?? false,
     seoTitle: product.seoTitle ?? "",
     seoDescription: product.seoDescription ?? "",
     metaKeywords: product.metaKeywords ?? "",
-    lowStockThreshold: product.lowStockThreshold,
-    criticalThreshold: product.criticalThreshold,
+    lowStockThreshold: product.lowStockThreshold ?? 10,
+    criticalThreshold: product.criticalThreshold ?? 5,
     fdaRegistrationNo: product.fdaRegistrationNo ?? "",
-    isFdaEvaluated: product.isFdaEvaluated,
+    isFdaEvaluated: product.isFdaEvaluated ?? false,
     ingredients: product.ingredients ?? "",
     directions: product.directions ?? "",
     warnings: product.warnings ?? "",
@@ -234,7 +234,7 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
             <label key={key} className="flex items-center gap-2.5 cursor-pointer select-none">
               <input
                 type="checkbox"
-                checked={form[key as keyof typeof form] as boolean}
+                checked={Boolean(form[key as keyof typeof form])}
                 onChange={(e) => set(key, e.target.checked)}
                 className="w-4 h-4 rounded accent-[#2D6A4F]"
               />
@@ -256,7 +256,7 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
         >
           <input
             type="checkbox"
-            checked={form.isFdaEvaluated}
+            checked={Boolean(form.isFdaEvaluated)}
             onChange={(e) => set("isFdaEvaluated", e.target.checked)}
             className="mt-0.5 w-4 h-4 rounded accent-[#2D6A4F]"
           />

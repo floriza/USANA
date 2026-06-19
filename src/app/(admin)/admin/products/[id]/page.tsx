@@ -78,7 +78,7 @@ export default async function AdminProductEditPage({ params }: Props) {
           lowStockThreshold: product.lowStockThreshold,
           criticalThreshold: product.criticalThreshold,
           fdaRegistrationNo: product.fdaRegistrationNo,
-          isFdaEvaluated: product.isFdaEvaluated,
+          isFdaEvaluated: product.isFdaEvaluated ?? false,
           ingredients: product.ingredients,
           directions: product.directions,
           warnings: product.warnings,
